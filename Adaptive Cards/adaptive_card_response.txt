@@ -1,0 +1,16 @@
+{
+    "type":"AdaptiveCard",
+    "body":[
+        {
+            "type":"TextBlock",
+            "size":"Medium",
+            "weight":"Bolder",
+            "text":"Thank You"
+        },
+        {
+            "type":"TextBlock",
+            "text":"Your response has been successfully recorded!"
+        }
+    ],
+    "version":"1.0"
+}

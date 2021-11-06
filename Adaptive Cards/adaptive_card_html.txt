@@ -1,0 +1,135 @@
+{
+  "type": "AdaptiveCard",
+  "version": "1.3",
+  "body": [
+    {
+      "type": "TextBlock",
+      "size": "Medium",
+      "weight": "Bolder",
+      "text": "Survey - Update your Vaccination Status!",
+      "wrap": true
+    },
+    {
+      "type": "ColumnSet",
+      "columns": [
+        {
+          "type": "Column",
+          "width": "auto",
+          "items": [
+            {
+              "type": "Image",
+              "style": "Person",
+              "url": "https://media-exp1.licdn.com/dms/image/C4D03AQFZEl8njYRXwQ/profile-displayphoto-shrink_200_200/0/1634660190130?e=1640822400&v=beta&t=Ww8nK1i4iDlCXDf8mRyOq133yjGP2eVdpYbHHkByUGA",
+              "size": "Small"
+            }
+          ]
+        },
+        {
+          "type": "Column",
+          "items": [
+            {
+              "type": "TextBlock",
+              "weight": "Bolder",
+              "text": "Sandy\n",
+              "wrap": true
+            },
+            {
+              "type": "TextBlock",
+              "wrap": true,
+              "text": "Survey End data - 2021-12-05 5:00 PM",
+              "spacing": "None"
+            }
+          ],
+          "width": "stretch"
+        }
+      ]
+    },
+    {
+      "type": "TextBlock",
+      "text": "Hey @{items('Apply_to_each')['name']} \n\nHope you are doing well!\n\nPlease update your vaccination status by choosing from the below options,",
+      "maxLines": 3
+    },
+    {
+      "type": "Input.ChoiceSet",
+      "choices": [
+        {
+          "title": "Fully Vaccinated",
+          "value": "Fully Vaccinated"
+        },
+        {
+          "title": "Partially Vaccinated",
+          "value": "Partially Vaccinated"
+        },
+        {
+          "title": "Not Vaccinated",
+          "value": "Not Vaccinated"
+        }
+      ],
+      "id": "vaccination_status",
+      "placeholder": "Select your Vaccination Status"
+    },
+    {
+      "type": "Input.ChoiceSet",
+      "choices": [
+        {
+          "title": "Covishield",
+          "value": "Covishield"
+        },
+        {
+          "title": "Covaxin",
+          "value": "Covaxin"
+        },
+        {
+          "title": "Sputnik V",
+          "value": "Sputnik V"
+        }
+      ],
+      "id": "vaccine_name",
+      "placeholder": "Select Vaccine Name"
+    },
+    {
+      "type": "Input.Date",
+      "errorMessage": "error message",
+      "id": "vaccinated_date",
+      "$when": "vaccination_status != \"Not Vaccinated\"",
+      "label": "Select your Vaccination Date"
+    },
+    {
+      "type": "Input.Text",
+      "placeholder": "Placeholder text",
+      "isVisible": false,
+      "id": "emp_id",
+      "value": "@{items('Apply_to_each')['emp_id']}"
+    },
+    {
+      "type": "Input.Text",
+      "placeholder": "Placeholder text",
+      "isVisible": false,
+      "id": "id",
+      "value": "@{items('Apply_to_each')['id']}"
+    }
+  ],
+  "actions": [
+    {
+      "type": "Action.Http",
+      "title": "Submit",
+      "url": "https://prod-02.centralindia.logic.azure.com:443/workflows/7bba670a58da44a0a8f23ae9696e9e9d/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=eAXaYmHg35ogCQ0FRy-iuAskI39IN3SUKa8by55oNE4",
+      "method": "POST",
+      "body": "{\n\"emp_id\":\"{{emp_id.value}}\",\n\"vaccination_status\":\"{{vaccination_status.value}}\",\n\"vaccinated_date\":\"{{vaccinated_date.value}}\",\n\"id\": \"{{id.value}}\",\n\"vaccine_name\":\"{{vaccine_name.value}}\"\n}",
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": ""
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "style": "positive",
+      "ignoreInputValidation": true,
+      "id": "submit"
+    }
+  ],
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
+}
