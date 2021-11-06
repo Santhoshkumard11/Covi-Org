@@ -1,0 +1,14 @@
+-------------
+used to update the Cosmos DB document
+
+{
+  "id": "@{triggerBody()?['id']}",
+  "emp_id": "@{triggerBody()?['emp_id']}",
+  "name":  "@{outputs('Get_a_document_(V2)')?['body']['name']}",
+  "department": "@{outputs('Get_a_document_(V2)')?['body']['department']}",
+  "gender": "@{outputs('Get_a_document_(V2)')?['body']['gender']}",
+  "role": "@{outputs('Get_a_document_(V2)')?['body']['role']}",
+  "vaccination_status": "@{triggerBody()?['vaccination_status']}",
+  "vaccine_name": "@{triggerBody()?['vaccine_name']}",
+  "vaccinated_date": "@{triggerBody()?['vaccinated_date']}"
+}
