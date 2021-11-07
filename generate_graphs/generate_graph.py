@@ -72,7 +72,7 @@ class GenerateGraph:
             legend="vaccination_status", title="By Vaccination Status",
             autopct=lambda p: '{:.0f}'.format(
                 (p / 100) * self.vaccine_status_df.sum()),
-            cmap="terrain")
+            cmap="terrain").legend(loc="upper left")
 
         image_object = vaccine_status_fig.get_figure()
 
@@ -104,7 +104,7 @@ class GenerateGraph:
 
         department_vaccination_status_fig = df_temp.plot.scatter(
             x="department", y="vaccination_status", color="#E26A2C",
-            figsize=(25, 18), fontsize=20)
+            figsize=(35, 14), fontsize=30)
 
         image_object = department_vaccination_status_fig.get_figure()
 
@@ -140,7 +140,7 @@ class GenerateGraph:
         final_df = pd.DataFrame(vaccination_status_list, index=department_list)
 
         department_vaccination_status_fig = final_df.plot(
-            kind="bar", stacked=True, figsize=(9, 9), fontsize=20,
+            kind="bar", stacked=True, figsize=(12, 12), fontsize=20,
         ).legend(loc='upper right', ncol=4, title="By Department")
 
         image_object = department_vaccination_status_fig.get_figure()
@@ -162,7 +162,6 @@ class GenerateGraph:
         self.generate_graph_vaccination_name()
         self.generate_graph_vaccine_status()
         self.generate_graph_department_with_vaccination_status_bar()
-
 
         logging.info("Successfully generated image objects")
 
