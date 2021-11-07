@@ -1,15 +1,15 @@
 # Covi-Org
-Covi Org is a Power App which provides your the ability to view trends and tracker your employees and alert co-workers in case of emergency. It can help you collect vaccination status and other details in just click of a button. Send periodic notification to all the unvaccinated employees to update their status (configurable).
+Covi Org is a Power App which provides your the ability to view trends and tracker your employees and alert co-workers in case of emergency. It can help you collect vaccination status and other details in just click of a button through Outlook Actionable Message. Send periodic notification to all the unvaccinated employees to update their status (configurable).
 
 ## YouTube Demo Video 📺📺
 
 [Youtube Link](https://youtube.com)
 
 ## Architecture Diagram
-<img src="https://github.com/Santhoshkumard11/Covi-Org/blob/main/images/architecture-diagram.png" height="440" width="1000" alt="architecture diagram">
+<img src="https://github.com/Santhoshkumard11/Covi-Org/blob/main/images/architecture_diagram.png" height="380" width="1300" alt="architecture diagram">
 
 ## Power Apps Content
-<img src="https://github.com/Santhoshkumard11/Covi-Org/blob/main/images/flow_diagram.png" height="580" alt="Content">
+<img src="https://github.com/Santhoshkumard11/Covi-Org/blob/main/images/flow_diagram.png" alt="Content">
 
 
 ## Services Used
@@ -18,6 +18,12 @@ Covi Org is a Power App which provides your the ability to view trends and track
 - Azure Cosmos DB
 - Azure Blob Storage
 - Adaptive Cards (Outlook Actionable Message)
+
+## Power Automate Flows
+Send Adaptive Card - compose and send adaptive cards via mail
+Adaptive Card Receiver - receive the submit trigger from adaptive card and updated the document in Cosmos DB
+Send Email Notification - Send an email notification or an email to all your surrounding people (Get Relevant People from Office 365 Users is used) 
+
 
 ## Sample Graphs
 <img src="https://github.com/Santhoshkumard11/Covi-Org/blob/main/images/graph-1.png" height="580" alt="Content">
