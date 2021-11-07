@@ -1,4 +1,3 @@
-from typing import Tuple
 import pandas as pd
 from blob_storage_client import BlobStorageClient
 import logging
@@ -20,6 +19,8 @@ class GenerateGraph:
 
         self.blob_client_obj_department_vaccination_status = BlobStorageClient(
             "coviorg-graph", "department_vaccination_status.png")
+        self.blob_client_obj_department_vaccination_status_bar = BlobStorageClient(
+            "coviorg-graph", "department_vaccination_status_bar.png")
 
         self.vaccine_status_df, self.vaccine_name_df = None, None
 
@@ -67,7 +68,7 @@ class GenerateGraph:
 
         # create pie graph with pandas dataframe
         vaccine_status_fig = self.vaccine_status_df.plot.pie(
-            y="vaccination_status", figsize=(5, 5),
+            y="vaccination_status", figsize=(8, 8), fontsize=20,
             legend="vaccination_status", title="By Vaccination Status",
             autopct=lambda p: '{:.0f}'.format(
                 (p / 100) * self.vaccine_status_df.sum()),
@@ -84,11 +85,11 @@ class GenerateGraph:
     def generate_graph_vaccination_name(self):
         # create pie graph with pandas dataframe
         vaccine_name_fig = self.vaccine_name_df.plot.pie(
-            y="vaccine_name", figsize=(5, 5),
+            y="vaccine_name", figsize=(8, 8), fontsize=20,
             legend="vaccine_name", title="By Vaccine Name",
             autopct=lambda p: '{:.0f}'.format(
                 (p / 100) * self.vaccine_name_df.sum()),
-            cmap="plasma")
+            cmap="Pastel1")
 
         # get the figure object
         image_object = vaccine_name_fig.get_figure()
@@ -102,12 +103,50 @@ class GenerateGraph:
         df_temp = pd.DataFrame(self.query_result)
 
         department_vaccination_status_fig = df_temp.plot.scatter(
-            x="department", y="vaccination_status", color="#E26A2C")
+            x="department", y="vaccination_status", color="#E26A2C",
+            figsize=(25, 18), fontsize=20)
 
         image_object = department_vaccination_status_fig.get_figure()
 
         self.save_image_to_blob_storage(
             self.blob_client_obj_department_vaccination_status.blob_client,
+            image_object)
+
+        image_object.clear(True)
+
+    def generate_graph_department_with_vaccination_status_bar(self):
+
+        df = pd.DataFrame(self.query_result)
+        department_list = df["department"].drop_duplicates()
+
+        vaccination_status_list = {
+            "Fully Vaccinated": [],
+            "Partially Vaccinated": [],
+            "Not Vaccinated": []}
+
+        for department_name in department_list:
+            vaccination_status_list["Fully Vaccinated"].extend([
+                list(
+                    ((df["department"] == department_name) &
+                     (df["vaccination_status"] == "Fully Vaccinated"))).count(
+                    True)])
+            vaccination_status_list["Partially Vaccinated"].extend([list(
+                ((df["department"] == department_name) &
+                 (df["vaccination_status"] == "Partially Vaccinated"))).count(True)])
+            vaccination_status_list["Not Vaccinated"].extend([list(
+                ((df["department"] == department_name) &
+                 (df["vaccination_status"] == "Not Vaccinated"))).count(True)])
+
+        final_df = pd.DataFrame(vaccination_status_list, index=department_list)
+
+        department_vaccination_status_fig = final_df.plot(
+            kind="bar", stacked=True, figsize=(9, 9), fontsize=20,
+        ).legend(loc='upper right', ncol=4, title="By Department")
+
+        image_object = department_vaccination_status_fig.get_figure()
+
+        self.save_image_to_blob_storage(
+            self.blob_client_obj_department_vaccination_status_bar.blob_client,
             image_object)
 
         image_object.clear(True)
@@ -122,6 +161,8 @@ class GenerateGraph:
         self.generate_graph_department_with_vaccination_status()
         self.generate_graph_vaccination_name()
         self.generate_graph_vaccine_status()
+        self.generate_graph_department_with_vaccination_status_bar()
+
 
         logging.info("Successfully generated image objects")
 

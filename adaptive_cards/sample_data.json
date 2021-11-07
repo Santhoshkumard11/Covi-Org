@@ -42,7 +42,7 @@
     "department": "ELT",
     "gender": "male",
     "role": "Trainee",
-    "vaccination_status": "Partically Vaccinated",
+    "vaccination_status": "Partially Vaccinated",
     "vaccine_name": "Sputnik V",
     "vaccinated_date": "2021-09-18"
 },
@@ -57,6 +57,29 @@
     "vaccination_status": "Not Vaccinated",
     "vaccine_name": "none",
     "vaccinated_date": "2021-09-18"
+},
+{
+    "s.no": 6,
+    "id": "119058",
+    "emp_id": "66",
+    "name": "aaa",
+    "department": "Data",
+    "gender": "male",
+    "role": "Trainee",
+    "vaccination_status": "Partially Vaccinated",
+    "vaccine_name": "none",
+    "vaccinated_date": "2021-09-18"
+},
+{
+    "s.no": 7,
+    "id": "119058",
+    "emp_id": "66",
+    "name": "aaa",
+    "department": "Data",
+    "gender": "male",
+    "role": "Trainee",
+    "vaccination_status": "Not Vaccinated",
+    "vaccine_name": "none",
+    "vaccinated_date": "2021-09-18"
 }
-
 ]
