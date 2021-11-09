@@ -39,4 +39,4 @@ Send Email Notification - Send an email notification or an email to all your sur
 <img src="https://github.com/Santhoshkumard11/Covi-Org/blob/main/images/graph-3.png" height="580" alt="Content">
 
 ## TODO:
-
+- Create a Cosmos DB trigger which can identify the people who are tested positive and send email notification to the people in their circle (which can be accomplished with the help of a connector in Office 365 - Get Relevant People) 
