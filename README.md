@@ -1,9 +1,15 @@
 # Covi-Org
-Covi Org is a Power App which provides your the ability to view trends and tracker your employees and alert co-workers in case of emergency. It can help you collect vaccination status and other details in just click of a button through Outlook Actionable Message. Send periodic notification to all the unvaccinated employees to update their status (configurable).
+Covi Org is a Power App that provides you the ability to view trends and tracker your employees status and alert co-workers in case of emergency. It can help you collect vaccination status and other details in just click of a button through Outlook Actionable Message. Send periodic notification to all the unvaccinated employees to update their status (configurable). The most important feature is generating near real-time graphs with the data from Cosmos DB.
 
 ## YouTube Demo Video 📺📺
 
-[Youtube Link](https://youtube.com)
+## [Demo Link](https://www.youtube.com/watch?v=DFKe5eMj2_c&ab_channel=LateNightCodewithSanthosh)
+
+
+<a href="https://youtu.be/DFKe5eMj2_c">
+  <img src="https://img.youtube.com/vi/DFKe5eMj2_c/hqdefault.jpg" width="600" alt="video">
+</a>
+
 
 ## Architecture Diagram
 <img src="https://github.com/Santhoshkumard11/Covi-Org/blob/main/images/architecture_diagram.png" height="380" width="1300" alt="architecture diagram">
