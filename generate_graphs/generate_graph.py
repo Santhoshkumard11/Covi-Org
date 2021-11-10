@@ -12,6 +12,8 @@ class GenerateGraph:
         # connect to cosmos db and blob storage
         self.cosmos_db_client_obj = cosmos_db_client_obj
 
+        # TODO: find a better way to connect with BlobStorage
+        # create different client for each blob
         self.blob_client_obj_vaccine_status = BlobStorageClient(
             "coviorg-graph", "vaccine_status_graph.png")
         self.blob_client_obj_vaccine_name = BlobStorageClient(
@@ -54,13 +56,17 @@ class GenerateGraph:
         logging.info("Gathered the data and created the dataframe")
 
     def save_image_to_blob_storage(self, blob_client, image_object):
+        """Process the image and upload it to blob storage"""
         buf = io.BytesIO()
         image_object.savefig(buf, format='png')
 
+        # get value of the image in bytes
         byte_im = buf.getvalue()
 
+        # upload it to blob storage with the respective client
         blob_client.upload_blob(
             byte_im, overwrite=True, blob_type="BlockBlob")
+        # flush and close the buffer for next image to be created and stored
         buf.flush()
         buf.close()
 
@@ -100,8 +106,10 @@ class GenerateGraph:
         image_object.clear(True)
 
     def generate_graph_department_with_vaccination_status(self):
+        # create a dataframe from all the documents in the cosmos DB
         df_temp = pd.DataFrame(self.query_result)
 
+        # generate the scatter plot
         department_vaccination_status_fig = df_temp.plot.scatter(
             x="department", y="vaccination_status", color="#E26A2C",
             figsize=(35, 14), fontsize=30)
@@ -112,11 +120,13 @@ class GenerateGraph:
             self.blob_client_obj_department_vaccination_status.blob_client,
             image_object)
 
+        # clear the image to avoid overlapping of images while plotting
         image_object.clear(True)
 
     def generate_graph_department_with_vaccination_status_bar(self):
 
         df = pd.DataFrame(self.query_result)
+        # get only unique departments
         department_list = df["department"].drop_duplicates()
 
         vaccination_status_list = {
@@ -124,21 +134,27 @@ class GenerateGraph:
             "Partially Vaccinated": [],
             "Not Vaccinated": []}
 
+        # iterate through all the departments and get the people with different vaccination status
         for department_name in department_list:
+
             vaccination_status_list["Fully Vaccinated"].extend([
                 list(
                     ((df["department"] == department_name) &
                      (df["vaccination_status"] == "Fully Vaccinated"))).count(
                     True)])
+
             vaccination_status_list["Partially Vaccinated"].extend([list(
                 ((df["department"] == department_name) &
                  (df["vaccination_status"] == "Partially Vaccinated"))).count(True)])
+
             vaccination_status_list["Not Vaccinated"].extend([list(
                 ((df["department"] == department_name) &
                  (df["vaccination_status"] == "Not Vaccinated"))).count(True)])
 
+        # create another dataframe with the result form the above iteration
         final_df = pd.DataFrame(vaccination_status_list, index=department_list)
 
+        # finally plot the image
         department_vaccination_status_fig = final_df.plot(
             kind="bar", stacked=True, figsize=(12, 12), fontsize=20,
         ).legend(loc='upper right', ncol=4, title="By Department")
@@ -149,6 +165,7 @@ class GenerateGraph:
             self.blob_client_obj_department_vaccination_status_bar.blob_client,
             image_object)
 
+        # clear the image to avoid overlapping of images while plotting
         image_object.clear(True)
 
     def start_process(self):
@@ -158,11 +175,16 @@ class GenerateGraph:
 
         self.prepare_df()
 
-        self.generate_graph_department_with_vaccination_status()
-        self.generate_graph_vaccination_name()
-        self.generate_graph_vaccine_status()
-        self.generate_graph_department_with_vaccination_status_bar()
+        try:
+            # generate and upload graphs to blob storage
+            self.generate_graph_department_with_vaccination_status()
+            self.generate_graph_vaccination_name()
+            self.generate_graph_vaccine_status()
+            self.generate_graph_department_with_vaccination_status_bar()
 
-        logging.info("Successfully generated image objects")
+        except Exception as e:
+            logging.exception(
+                f"An error occurred while trying to generate and upload image to blob storage \n Error details: \n {e}",
+                exc_info=True, stack_info=True)
 
-        logging.info("Successfully uploaded image to blob storage")
+        logging.info("Successfully uploaded images to blob storage")
